@@ -4,7 +4,7 @@ import pickle
 import os
 
 
-def capture_and_encode(name, roll_number, num_samples=5):
+def capture_and_encode(name, student_id, num_samples=5):
     encodings = []
     cam = cv2.VideoCapture(0)
     count = 0
@@ -33,9 +33,9 @@ def capture_and_encode(name, roll_number, num_samples=5):
         return
 
     os.makedirs('recognition/encodings', exist_ok=True)
-    save_path = f'recognition/encodings/{roll_number}.pkl'
+    save_path = f'recognition/encodings/{student_id}.pkl'
     with open(save_path, 'wb') as f:
-        pickle.dump({'name': name, 'roll_number': roll_number,
+        pickle.dump({'name': name, 'student_id': student_id,
                     'encodings': encodings}, f)
 
     print(f"Saved encoding for {name} to {save_path}")
@@ -43,5 +43,5 @@ def capture_and_encode(name, roll_number, num_samples=5):
 
 if __name__ == '__main__':
     name = input("Enter student name: ")
-    roll_number = input("Enter roll number: ")
-    capture_and_encode(name, roll_number)
+    student_id = input("Enter student ID: ")
+    capture_and_encode(name, student_id)

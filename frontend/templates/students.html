@@ -16,14 +16,14 @@
             <thead class="table-dark">
                 <tr>
                     <th>Name</th>
-                    <th>Roll Number</th>
+                    <th>Student ID</th>
                 </tr>
             </thead>
             <tbody>
                 {% for student in students %}
                 <tr>
                     <td>{{ student.name }}</td>
-                    <td>{{ student.roll_number }}</td>
+                    <td>{{ student.student_id }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

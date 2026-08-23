@@ -1,11 +1,10 @@
-from database.models import db, mark_attendance
-from flask import Flask
-import glob
-import pickle
-import face_recognition
 import cv2
+import face_recognition
+import pickle
+import glob
 import os
-
+from flask import Flask
+from database.models import db, mark_attendance
 
 app = Flask(__name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -23,7 +22,7 @@ def load_known_faces():
                 known.append({
                     'encoding': encoding,
                     'name': data['name'],
-                    'roll_number': data['roll_number']
+                    'student_id': data['student_id']
                 })
     return known
 
@@ -56,7 +55,7 @@ def run_recognition():
                     match_index = matches.index(True)
                     matched = known_faces[match_index]
                     name = matched['name']
-                    record = mark_attendance(matched['roll_number'])
+                    record = mark_attendance(matched['student_id'])
                     if record:
                         print(f"Marked attendance: {name}")
                     else:
