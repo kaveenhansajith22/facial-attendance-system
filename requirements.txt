@@ -3,3 +3,4 @@ flask-sqlalchemy
 opencv-python
 face_recognition
 pyswip
+flask-login
