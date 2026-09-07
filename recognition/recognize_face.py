@@ -15,7 +15,8 @@ db.init_app(app)
 
 def load_known_faces():
     known = []
-    for path in glob.glob('recognition/encodings/*.pkl'):
+    encoding_dir = os.path.join(BASE_DIR, 'encodings')
+    for path in glob.glob(os.path.join(encoding_dir, '*.pkl')):
         with open(path, 'rb') as f:
             data = pickle.load(f)
             for encoding in data['encodings']:
@@ -35,12 +36,18 @@ def run_recognition():
 
     known_encodings = [k['encoding'] for k in known_faces]
     cam = cv2.VideoCapture(0)
+    if not cam.isOpened():
+        print("Unable to open the camera.")
+        return
 
     print("Camera started. Press 'q' to quit.")
 
     with app.app_context():
         while True:
             ret, frame = cam.read()
+            if not ret or frame is None:
+                print("Unable to read a frame from the camera.")
+                break
             rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             face_locations = face_recognition.face_locations(rgb)
             face_encodings = face_recognition.face_encodings(

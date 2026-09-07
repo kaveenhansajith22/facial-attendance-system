@@ -15,7 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_PATH}'
 db.init_app(app)
 
 # Set up Flask-Login in app.py
-app.config['SECRET_KEY'] = 'change-this-to-something-random-later'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'development-only-secret')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -82,7 +82,10 @@ def students_page():
 @app.route('/start-session')
 def start_session():
     import threading
-    from recognition.recognize_face import run_recognition
+    try:
+        from recognition.recognize_face import run_recognition
+    except ImportError as exc:
+        return f'Face recognition dependencies are unavailable: {exc}', 503
 
     thread = threading.Thread(target=run_recognition, daemon=True)
     thread.start()
